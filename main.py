@@ -1,59 +1,49 @@
-import argparse
-import logging
-import time
-import numpy as np
 from waggle import plugin
-from waggle.data.vision import Camera
+from waggle.data.audio import Microphone
+from tensorflow import keras
+import time
 
 
-def process_frame(frame):
-    # we assume frame shape is (H, W, 3) for an RGB image
-    mean = np.mean(frame, (0, 1))
-    min = np.min(frame, (0, 1))
-    max = np.min(frame, (0, 1))
-    return {
-        "mean": mean,
-        "min": min,
-        "max": max,
-    }
-
+def load_model(path_to_model):
+    new_model = tensorflow.keras.models.load_model(path_to_model)
+    # Evaluate the restored model
+    # loss, acc = new_model.evaluate(test_images, test_labels, verbose=2)
+    # print('Restored model, accuracy: {:5.2f}%'.format(100 * acc))
+    # print(new_model.predict(test_images).shape)
 
 def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--device", default=0, help="camera device to use")
-    parser.add_argument("--rate", default=10, type=float, help="sampling interval in seconds")
-    args = parser.parse_args()
-
-    logging.basicConfig(
-        level=logging.INFO,
-        format='%(asctime)s %(message)s',
-        datefmt='%Y/%m/%d %H:%M:%S')
-
-    logging.info("starting plugin. will process a frame every %ss", args.rate)
-    
     plugin.init()
+    mic = Microphone()
+    
+    # load the machine learning model
+    file = open('model.json', 'r')
+    loaded  = file.read()
+    file.close()
 
-    cam = Camera(args.device)
+    model = model_from_json(loaded)
+    model.load_weights("model.h5")
 
-    for sample in cam.stream():
-        results = process_frame(sample.data)
-
-        logging.info("results %s", results)
-
-        plugin.publish("image.mean.red", results["mean"][0])
-        plugin.publish("image.mean.green", results["mean"][1])
-        plugin.publish("image.mean.blue", results["mean"][2])
-
-        plugin.publish("image.min.red", results["min"][0])
-        plugin.publish("image.min.green", results["min"][1])
-        plugin.publish("image.min.blue", results["min"][2])
-
-        plugin.publish("image.max.red", results["max"][0])
-        plugin.publish("image.max.green", results["max"][1])
-        plugin.publish("image.max.blue", results["max"][2])
-
-        time.sleep(args.rate)
-
-
-if __name__ == "__main__":
+    
+    while True:
+        # get data
+        sample = mic.record(3)
+        sample.save('test.ogg')
+        
+        # generate prediction
+        output = model.predict(sample.data)
+        
+        # publish predictions
+        plugin.publish("bird_song_detected_acafly", 1)
+        plugin.publish("bird_song_detected_acowoo", 1)
+        plugin.publish("bird_song_detected_aldly", 1)
+        
+        time.sleep(10)
+        
+if __name__ = "__main__":
     main()
+        
+        
+        
+
+    
+
