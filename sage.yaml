@@ -1,10 +1,13 @@
 name: "Bird Song Classifier"
 description: "A Neural Network model that takes bird song audio file as input classifies bird species."
 version: "0.1.0"
+authors: "Mia (Yaqin) Wang <wang4070@purdue.edu>, Emily Brown <elbrown1800@gmail.com>, Nicola Ferrier <nferrier@anl.gov>, Sean Shahkarami <sshahkarami@uchicago.edu>"
+keywords: "Feature Extraction, Classification Algorithm, Audio Processing, Machine Learning, Neural Network"
+homepage: "https://github.com/waggle-sensor/summer2021/tree/main/Wang"
 source:
   architectures:
     - "linux/amd64"
-    
+
   url: "https://github.com/waggle-sensor/plugin-numpy-example"
   branch: "main"
   testing:
