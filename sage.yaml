@@ -1,4 +1,4 @@
-name: "Bird Song Classifier"
+name: "bird-song-classifier"
 description: "A Neural Network model that takes bird song audio file as input classifies bird species."
 version: "0.1.0"
 authors: "Mia (Yaqin) Wang <wang4070@purdue.edu>, Emily Brown <elbrown1800@gmail.com>, Nicola Ferrier <nferrier@anl.gov>, Sean Shahkarami <sshahkarami@uchicago.edu>"
